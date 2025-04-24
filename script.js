@@ -53,7 +53,7 @@ function getCountryCode(countryName) {
     .then(data => {        
         const countryCode = data[0].idd.root + data[0].idd.suffixes.join("")
         const selectCode = document.getElementById("countryCode");
-        selectCode.value = countryCode;
+        selectCode.value = value = countryCode;
     })
     .catch(error => {
         console.error('Wystąpił błąd:', error);

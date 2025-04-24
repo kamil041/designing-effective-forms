@@ -1,28 +1,22 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  const firebaseConfig = {
+const firebaseConfig = {
     apiKey: "AIzaSyDEwawPHfFTi4ImLeEsUy1rh7y_WSKk7PY",
     authDomain: "form-6a028.firebaseapp.com",
     projectId: "form-6a028",
     storageBucket: "form-6a028.firebasestorage.app",
     messagingSenderId: "304856997731",
     appId: "1:304856997731:web:6962a1c339f901cfcdbd56"
-  };
+};
 
-  // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth();
 const provider = new GoogleAuthProvider();
 //Bez parametru provider zapyta o użytkownika
 provider.setCustomParameters({
-    prompt: 'select_account'
+  prompt: 'select_account'
 })
 
 const signInButton = document.querySelector("#signInButton");
@@ -32,6 +26,15 @@ const userSignIn = async () => {
   signInWithPopup(auth, 
   provider).then((result) => {
   const user = result.user;
+  const email = document.getElementById("exampleInputEmail1");
+  email.value = user.email;
+  const name1 = document.getElementById("firstName");
+  const name2 = document.getElementById("lastName");
+  var nam = user.displayName;
+  const [n1,n2] = nam.split(" ");
+  name1.value = n1;
+  name2.value = n2;
+  
   console.log(user);
   }).catch((error) => {
   const errorCode = error.code;
@@ -55,3 +58,7 @@ onAuthStateChanged(auth, (user) => {
    })
    signInButton.addEventListener("click", userSignIn);
    signOutButton.addEventListener("click", userSignOut);
+
+   
+   
+   
