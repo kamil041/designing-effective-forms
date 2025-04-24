@@ -19,6 +19,7 @@ async function fetchAndFillCountries() {
         const data = await response.json();
         const countries = data.map(country => country.name.common);
         countryInput.innerHTML = countries.map(country => `<option value="${country}">${country}</option>`).join('');
+        getCountryByIP();
     } catch (error) {
         console.error('Wystąpił błąd:', error);
     }
@@ -29,7 +30,10 @@ function getCountryByIP() {
         .then(response => response.json())
         .then(data => {
             const country = data.country;
-            // TODO inject country to form and call getCountryCode(country) function
+            getCountryCode(data.country)
+            const select = document.getElementById("country");
+            select.value = country;
+            
         })
         .catch(error => {
             console.error('Błąd pobierania danych z serwera GeoJS:', error);
@@ -48,17 +52,35 @@ function getCountryCode(countryName) {
     })
     .then(data => {        
         const countryCode = data[0].idd.root + data[0].idd.suffixes.join("")
-        // TODO inject countryCode to form
+        const selectCode = document.getElementById("countryCode");
+        selectCode.value = countryCode;
     })
     .catch(error => {
         console.error('Wystąpił błąd:', error);
     });
 }
 
-
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("form");
+  
+    form.addEventListener("submit", function (e) {
+      if (!form.checkValidity()) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      else{
+        e.preventDefault();
+        const feedbackModal = new bootstrap.Modal(document.getElementById('form-feedback-modal'));
+    feedbackModal.show();
+      }
+  
+      form.classList.add("was-validated");
+    });
+  });
 (() => {
     // nasłuchiwania na zdarzenie kliknięcia myszką
     document.addEventListener('click', handleClick);
 
     fetchAndFillCountries();
+
 })()
